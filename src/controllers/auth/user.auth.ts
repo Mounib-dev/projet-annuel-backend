@@ -26,7 +26,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       id: user._id,
       role: user.role,
     };
-    const token = jwt.sign(payload, SECRET);
+    const token = jwt.sign(payload, SECRET, {
+      expiresIn: 60 * 60,
+    });
     return res.status(201).json({ accessToken: token });
   } catch (err: any) {
     console.error(err);
