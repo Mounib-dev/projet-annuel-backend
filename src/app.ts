@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 
 import router from "./routes/index.api";
 import userRoutes from "./routes/user.api";
+import authRoutes from "./routes/auth.api";
 
 const app: Express = express();
 
@@ -19,6 +20,7 @@ let port = process.env.SERVER_PORT || 3000;
 
 app.use("/api/v1", router);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 const server = app.listen(port, async () => {
   console.log(`[server]:🗄️  Server is running at http://localhost:${port}`);
