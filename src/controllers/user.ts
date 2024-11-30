@@ -4,6 +4,7 @@ import {
   generateInternalServerErrorMessage,
   generateUnmatchedPasswordsErrorMessage,
   generateUsedEmailErrorMessage,
+  generateUnauthorizedErrorMessage,
 } from "../helpers/generateErrorResponse";
 
 import bcrypt from "bcrypt";
@@ -40,4 +41,21 @@ export const registerUser = async (
     }
   }
   return res.status(400).json(generateUnmatchedPasswordsErrorMessage());
+};
+
+export const userInfo = async (req: Request, res: Response): Promise<any> => {
+  const { id } = req.body.user;
+  try {
+    const user = await User.findOne({ _id: id }, { password: 0 });
+    console.log(user);
+    if (!user) {
+      return res.status(401).json(generateUnauthorizedErrorMessage());
+    }
+    return res.status(200).json({
+      user,
+    });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json(generateInternalServerErrorMessage());
+  }
 };
