@@ -26,7 +26,8 @@ const server = app.listen(port, async () => {
   try {
     await mongoose.connect(process.env.DATABASE_URL as string);
     console.log("🛢️  Connected To Database");
-  } catch (error) {
+  } catch (error: any) {
+    console.error(error);
     console.log("⚠️ Error to connect Database");
   }
 });
