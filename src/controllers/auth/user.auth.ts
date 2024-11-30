@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user";
 import {
-  generateUnahorizedErrorMessage,
   generateInternalServerErrorMessage,
+  generateInvalidCredentialsErrorMessage,
 } from "../../helpers/generateErrorResponse";
 
 import bcrypt from "bcrypt";
@@ -15,11 +15,11 @@ export const login = async (req: Request, res: Response): Promise<any> => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json(generateUnahorizedErrorMessage());
+      return res.status(401).json(generateInvalidCredentialsErrorMessage());
     }
     const passwordsMatch = await bcrypt.compare(password, user.password);
     if (!passwordsMatch) {
-      return res.status(401).json(generateUnahorizedErrorMessage());
+      return res.status(401).json(generateInvalidCredentialsErrorMessage());
     }
 
     const payload = {
