@@ -12,3 +12,7 @@ export const generateUnmatchedPasswordsErrorMessage = (): ErrorResponse => {
 export const generateUsedEmailErrorMessage = (): ErrorResponse => {
   return { message: "Email already used." };
 };
+
+export const generateUnahorizedErrorMessage = (): ErrorResponse => {
+  return { message: "Wrong email or password." };
+};
