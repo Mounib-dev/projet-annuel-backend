@@ -6,7 +6,10 @@ import {
   generateUsedEmailErrorMessage,
   generateUnauthorizedErrorMessage,
   generateNotFoundUsersErrorMessage,
+  generateNotFoundUserErrorMessage,
 } from "../helpers/generateErrorResponse";
+
+import { userRoleChangeSuccess } from "../helpers/generateSuccessResponse";
 
 import bcrypt from "bcrypt";
 
@@ -71,6 +74,28 @@ export const retrieveUsers = async (
       return res.status(404).json(generateNotFoundUsersErrorMessage());
     }
     return res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(generateInternalServerErrorMessage());
+  }
+};
+
+export const changeUserRole = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  const id = req.params.id;
+  try {
+    const user = await User.findOne(
+      { _id: id },
+      { password: 0 },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json(generateNotFoundUserErrorMessage());
+    }
+    await user.updateOne(req.body);
+    return res.status(200).json(userRoleChangeSuccess());
   } catch (err) {
     console.error(err);
     return res.status(500).json(generateInternalServerErrorMessage());
