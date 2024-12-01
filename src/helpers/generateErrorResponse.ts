@@ -21,3 +21,11 @@ export const generateInvalidCredentialsErrorMessage = (): ErrorResponse => {
 export const generateUnauthorizedErrorMessage = (): ErrorResponse => {
   return { message: "Unauthorized." };
 };
+
+export const generateNoPermissionsErrorMessage = (): ErrorResponse => {
+  return { message: "You don't have permission." };
+};
+
+export const generateNotFoundUsersErrorMessage = (): ErrorResponse => {
+  return { message: "Users not found." };
+};
