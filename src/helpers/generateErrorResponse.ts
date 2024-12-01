@@ -29,3 +29,7 @@ export const generateNoPermissionsErrorMessage = (): ErrorResponse => {
 export const generateNotFoundUsersErrorMessage = (): ErrorResponse => {
   return { message: "Users not found." };
 };
+
+export const generateNotFoundUserErrorMessage = (): ErrorResponse => {
+  return { message: "User not found." };
+};
