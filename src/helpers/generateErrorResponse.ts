@@ -33,3 +33,7 @@ export const generateNotFoundUsersErrorMessage = (): ErrorResponse => {
 export const generateNotFoundUserErrorMessage = (): ErrorResponse => {
   return { message: "User not found." };
 };
+
+export const generateNotFoundTransactionsErrorMessage = (): ErrorResponse => {
+  return { message: "Transactions not found." };
+};
