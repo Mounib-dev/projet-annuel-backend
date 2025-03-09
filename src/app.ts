@@ -11,6 +11,9 @@ import router from "./routes/index.api";
 import userRoutes from "./routes/user.api";
 import authRoutes from "./routes/auth.api";
 
+import transactionRoutes from "./routes/transaction.api";
+import chatbotRoutes from "./routes/chatbot.api";
+
 const app: Express = express();
 
 app.use(cors());
@@ -21,6 +24,9 @@ let port = process.env.SERVER_PORT || 3000;
 app.use("/api/v1", router);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auth", authRoutes);
+
+app.use("/api/v1/transaction", transactionRoutes);
+app.use("/api/v1/chatbot", chatbotRoutes);
 
 const server = app.listen(port, async () => {
   console.log(`[server]:🗄️  Server is running at http://localhost:${port}`);
