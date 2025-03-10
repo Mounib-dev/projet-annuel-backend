@@ -29,7 +29,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     const token = jwt.sign(payload, SECRET, {
       expiresIn: 60 * 60,
     });
-    return res.status(201).json({ accessToken: token });
+    return res.status(201).json({ token: token });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json(generateInternalServerErrorMessage());
