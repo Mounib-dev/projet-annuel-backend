@@ -4,6 +4,7 @@ import {
   generateInternalServerErrorMessage,
   generateNotFoundTransactionsErrorMessage,
 } from "../../helpers/generateErrorResponse";
+import { Balance } from "../../models/Balance";
 
 export const createTransaction: RequestHandler = async (
   req,
@@ -24,11 +25,17 @@ export const createTransaction: RequestHandler = async (
   });
   try {
     const createdTransaciton = await transaction.save();
-    if (createdTransaciton) {
-      return res.status(201).json({
-        message: "Transaction created successfully",
-      });
+
+    const userBalance = await Balance.findOne({
+      user: user.id,
+    });
+    if (userBalance && transactionType === "expense") {
+      userBalance.amount -= amount;
+      await userBalance.save();
     }
+    return res.status(201).json({
+      message: "Transaction created successfully",
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json(generateInternalServerErrorMessage());
@@ -41,11 +48,11 @@ export const retrieveTransactions: RequestHandler = async (
   next
 ): Promise<any> => {
   const userId = req.body.user.id;
-  console.log("*****************");
-  console.log(userId);
+  // console.log("*****************");
+  // console.log(userId);
   try {
     const transactions = await Transaction.find({ user: userId });
-    console.log(transactions);
+    // console.log(transactions);
     if (!transactions) {
       return res.status(404).json(generateNotFoundTransactionsErrorMessage());
     }
