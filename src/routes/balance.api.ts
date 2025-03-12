@@ -1,10 +1,10 @@
 import { Router } from "express";
 import authorize from "../middlewares/auth";
-import { createBalance } from "../controllers/balance/balance";
+import { createBalance, retrieeBalance } from "../controllers/balance/balance";
 
 const router = Router();
 
-router.get("/");
+router.get("/", authorize, retrieeBalance);
 
 router.post("/create", authorize, createBalance);
 
