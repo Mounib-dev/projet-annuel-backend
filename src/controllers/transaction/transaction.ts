@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { ITransaction, Transaction } from "../../models/Transaction";
 import {
   generateInternalServerErrorMessage,
+  generateNotFoundBalanceErrorMessage,
   generateNotFoundTransactionsErrorMessage,
 } from "../../helpers/generateErrorResponse";
 import { Balance } from "../../models/Balance";
@@ -29,9 +30,15 @@ export const createTransaction: RequestHandler = async (
     const userBalance = await Balance.findOne({
       user: user.id,
     });
+    console.log(typeof amount);
     if (userBalance && transactionType === "expense") {
-      userBalance.amount -= amount;
+      userBalance.amount -= +amount;
       await userBalance.save();
+    } else if (userBalance && transactionType === "income") {
+      userBalance.amount += +amount;
+      await userBalance.save();
+    } else {
+      return res.status(404).json(generateNotFoundBalanceErrorMessage());
     }
     return res.status(201).json({
       message: "Transaction created successfully",
