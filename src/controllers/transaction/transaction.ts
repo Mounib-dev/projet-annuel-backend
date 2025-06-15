@@ -7,6 +7,8 @@ import {
 } from "../../helpers/generateErrorResponse";
 import { Balance } from "../../models/Balance";
 
+import { updateRecommendationReady } from "../../services/goal/updateRecommandationReady";
+
 export const createTransaction: RequestHandler = async (
   req,
   res,
@@ -40,6 +42,7 @@ export const createTransaction: RequestHandler = async (
     } else {
       return res.status(404).json(generateNotFoundBalanceErrorMessage());
     }
+    await updateRecommendationReady(user.id);
     return res.status(201).json({
       message: "Transaction created successfully",
     });
