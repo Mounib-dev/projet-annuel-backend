@@ -37,3 +37,7 @@ export const generateNotFoundUserErrorMessage = (): ErrorResponse => {
 export const generateNotFoundTransactionsErrorMessage = (): ErrorResponse => {
   return { message: "Transactions not found." };
 };
+
+export const generateNotFoundBalanceErrorMessage = (): ErrorResponse => {
+  return { message: "Balance not found." };
+};

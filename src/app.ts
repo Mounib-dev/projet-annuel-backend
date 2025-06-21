@@ -14,6 +14,7 @@ import authRoutes from "./routes/auth.api";
 import transactionRoutes from "./routes/transaction.api";
 import chatbotRoutes from "./routes/chatbot.api";
 import balanceRoutes from "./routes/balance.api";
+import goalRoutes from "./routes/goal.api";
 
 const app: Express = express();
 
@@ -29,6 +30,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/transaction", transactionRoutes);
 app.use("/api/v1/chatbot", chatbotRoutes);
 app.use("/api/v1/balance", balanceRoutes);
+app.use("/api/v1/goal", goalRoutes);
 
 const server = app.listen(port, async () => {
   console.log(`[server]:🗄️  Server is running at http://localhost:${port}`);
