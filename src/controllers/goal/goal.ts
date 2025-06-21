@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Goal } from "../../models/Goal";
-import { isValidObjectId } from "mongoose";
 
 // Create Goal
 export const createGoal = async (req: Request, res: Response): Promise<any> => {
