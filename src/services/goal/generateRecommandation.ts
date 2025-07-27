@@ -55,6 +55,14 @@ export const generateRecommandation = async (
 
                 Si les données sont insuffisantes, demande des précisions avec bienveillance.
 
+                Tu dois prendre en compte la date de l'émission de la demande : ${new Date()}, tu ne dois donc pas donner des recommandations antérieurs à celle-ci et si tu vois que l'utilisateur ne dispose pas d'assez de temps selon les données, tu dois l'en informer et lui proposer une date plus logique ou un montant plus conséquant à epargner, tu peux proposer autre(s) chose(s) si tu as des idées aussi. 
+                
+                Tu dois être pertinent et réaliste. 
+
+                Tu dois faire sentir l'utilisateur important en le tutoyant et évite les phrases du genre "L'utilisateur..."
+
+                Si tu constates que le montant à épargner est irréaliste selon la plage de revenus mentionnée alors tu devras proposer une nouvelle date cible.
+
                 Voici donc les données fournis par l'utilisateur: 
 
                 La description: ${description}, le montant cible: ${targetAmount}, la date cible: ${targetDate}
