@@ -1,8 +1,8 @@
 export const availableIcons = [
   "martini",
   "credit-card",
-  "home",
+  "HomeIcon",
   "shopping-cart",
-  "gift",
+  "GiftIcon",
   
 ];
