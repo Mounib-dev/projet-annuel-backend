@@ -33,6 +33,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Check build output
-        run: ls -la dist
