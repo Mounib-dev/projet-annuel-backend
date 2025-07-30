@@ -15,10 +15,10 @@ jobs:
 
       - uses: ./.github/actions/setup-node
 
-      - name: Run Linter
+      - name: Lint
         run: npm run lint
 
-      - name: Run Tests
+      - name: Tests
         run: npm run test -- --ci
 
   build:
@@ -31,5 +31,8 @@ jobs:
 
       - uses: ./.github/actions/setup-node
 
-      - name: Build Project
+      - name: Build
         run: npm run build
+
+      - name: Check build output
+        run: ls -la dist
