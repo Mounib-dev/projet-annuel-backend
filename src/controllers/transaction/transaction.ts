@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { ITransaction, Transaction } from "../../models/Transaction";
+import { Transaction } from "../../models/Transaction";
 import {
   generateInternalServerErrorMessage,
   generateNotFoundBalanceErrorMessage,
@@ -11,13 +11,10 @@ import { updateRecommendationReady } from "../../services/goal/updateRecommandat
 
 export const createTransaction: RequestHandler = async (
   req,
-  res,
-  next
+  res
 ): Promise<any> => {
   const { transactionType, category, amount, description, date, user } =
     req.body;
-  console.log(req.body);
-  console.log(user.id);
   const transaction = new Transaction({
     type: transactionType,
     category,
@@ -27,12 +24,11 @@ export const createTransaction: RequestHandler = async (
     user: user.id,
   });
   try {
-    const createdTransaciton = await transaction.save();
+    await transaction.save();
 
     const userBalance = await Balance.findOne({
       user: user.id,
     });
-    console.log(typeof amount);
     if (userBalance && transactionType === "expense") {
       userBalance.amount -= +amount;
       await userBalance.save();
@@ -54,15 +50,11 @@ export const createTransaction: RequestHandler = async (
 
 export const retrieveTransactions: RequestHandler = async (
   req,
-  res,
-  next
+  res
 ): Promise<any> => {
   const userId = req.body.user.id;
-  // console.log("*****************");
-  // console.log(userId);
   try {
     const transactions = await Transaction.find({ user: userId });
-    // console.log(transactions);
     if (!transactions) {
       return res.status(404).json(generateNotFoundTransactionsErrorMessage());
     }

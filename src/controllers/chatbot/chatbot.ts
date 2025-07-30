@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RequestHandler } from "express";
 import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
@@ -5,10 +6,7 @@ import { streamText } from "ai";
 const model = openai("gpt-4o");
 
 export const chatBot: RequestHandler = async (req, res) => {
-  console.log(req.body);
   const { messages } = req.body;
-  console.log(req.body.user?.id);
-  const userId = req.body.user?.id;
 
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -36,7 +34,6 @@ export const chatBot: RequestHandler = async (req, res) => {
     let fullResponse = "";
 
     for await (const chunk of result.textStream) {
-      console.log(chunk);
       res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
       fullResponse += chunk;
     }

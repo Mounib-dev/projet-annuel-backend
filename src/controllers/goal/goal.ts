@@ -62,12 +62,7 @@ export const getGoalById = async (
 };
 
 export const updateGoal = async (req: Request, res: Response): Promise<any> => {
-  console.log(req.body);
   const { description, targetAmount, targetDate } = req.body;
-  console.log(req.params.id);
-  console.log(description);
-  console.log(targetAmount);
-  console.log(targetDate);
   try {
     const userId = req.body.user.id;
     const goal = await Goal.findOneAndUpdate(
@@ -83,7 +78,6 @@ export const updateGoal = async (req: Request, res: Response): Promise<any> => {
     );
 
     if (!goal) return res.status(404).json({ message: "Objectif non trouvé" });
-    console.log(goal);
     return res.status(200).json(goal);
   } catch (err) {
     console.error(err);
@@ -96,13 +90,10 @@ export const updateGoal = async (req: Request, res: Response): Promise<any> => {
 export const deleteGoal = async (req: Request, res: Response): Promise<any> => {
   try {
     const userId = req.body.user.id;
-    console.log(req.params.id);
-    console.log("Delete:", userId);
     const goal = await Goal.findOneAndDelete({
       _id: req.params.id,
       user: userId,
     });
-    console.log("???");
     if (!goal) return res.status(404).json({ message: "Objectif non trouvé" });
 
     return res.status(204).send();

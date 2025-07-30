@@ -1,4 +1,3 @@
-import { RequestHandler } from "express";
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { IGoal } from "../../models/Goal";
