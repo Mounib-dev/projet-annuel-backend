@@ -1,9 +1,4 @@
-import { RequestHandler } from "express";
-import { openai } from "@ai-sdk/openai";
-import { generateText } from "ai";
 import { IGoal } from "../../models/Goal";
-
-const model = openai("gpt-4o");
 
 type RecommandationPayload = Pick<
   IGoal,
@@ -16,53 +11,39 @@ export const generateRecommandation = async (
   const { description, targetAmount, targetDate } = payload;
 
   try {
-    const result = await generateText({
-      model,
-      messages: [
-        {
-          role: "system",
-          content: `
-                Tu es un assistant financier intelligent. Ton objectif est de fournir des conseils financiers pratiques et personnalisés à l'utilisateur en fonction de ses objectifs d'épargne.
+    // Construire le prompt final
+    const finalPrompt = `
+Tu es un assistant financier intelligent. Ton objectif est de fournir des conseils financiers pratiques et personnalisés à l'utilisateur en fonction de ses objectifs d'épargne.
 
-                Contexte : L'utilisateur te fournit une description de son objectif (ex. : acheter une voiture, partir en voyage, créer une entreprise ou autre), un montant cible (en Euros) et une date cible (la date à laquelle il aimerait pouvoir avoir la somme voulue ) pour atteindre cet objectif.
+Contexte : L'utilisateur te fournit une description de son objectif (ex. : acheter une voiture, partir en voyage, créer une entreprise ou autre), un montant cible (en Euros) et une date cible (la date à laquelle il aimerait pouvoir avoir la somme voulue) pour atteindre cet objectif.
 
-                Tâche :
+Tâche :
+- Analyse les informations fournies.
+- Déduis une stratégie d’épargne adaptée à son objectif et au temps disponible sachant qu'il habite en France et qu'il y travaille.
+- Donne des conseils concrets, réalistes et bienveillants (par exemple : combien mettre de côté chaque mois, réduire certaines dépenses, augmenter les revenus si nécessaire).
+- Si les objectifs sont difficiles à atteindre dans le délai imparti, propose des alternatives (ex : ajuster la date ou le montant).
+- Commence par un résumé clair de l’objectif, puis détaille les conseils dans une structure simple :
+  - Objectif résumé
+  - Épargne mensuelle conseillée
+  - Recommandations personnalisées
+  - Astuces supplémentaires (facultatif)
+- Termine par : "N'hésite pas à enrichir la description ou changer de date cible et demander une nouvelle recommandation."
+- Restrictions : Ne donne jamais de conseils juridiques, fiscaux ou d'investissement complexes. Si les données sont insuffisantes, demande des précisions avec bienveillance.
+- Prends en compte la date actuelle (${new Date()}) pour vérifier la faisabilité. Si le temps est trop court, propose une nouvelle date ou un plan réaliste.
+- Tutoiement obligatoire.
+- Si tu constates que le montant à épargner est irréaliste, propose une nouvelle date cible.
+- Voici les données fournies : Description = ${description}, Montant cible = ${targetAmount}, Date cible = ${targetDate}.
+`;
 
-                Analyse les informations fournies.
+    // URL Pollinations en mode privé
+    const url = `https://text.pollinations.ai/${encodeURIComponent(
+      finalPrompt
+    )}?private=true`;
 
-                Déduis une stratégie d’épargne adaptée à son objectif et au temps disponible sachant qu'il habite en France et qu'il y travaille.
+    const response = await fetch(url);
+    const text = await response.text();
 
-                Donne des conseils concrets, réalistes et bienveillants (par exemple : combien mettre de côté chaque mois, réduire certaines dépenses, augmenter les revenus si nécessaire).
-
-                Si les objectifs sont difficiles à atteindre dans le délai imparti, propose des alternatives (ex : ajuster la date ou le montant).
-
-                Format de la réponse :
-                Commence par un résumé clair de l’objectif, puis détaille les conseils dans une structure simple, par exemple :
-
-                Objectif résumé
-
-                Épargne mensuelle conseillée
-
-                Recommandations personnalisées
-
-                Astuces supplémentaires (facultatif)
-
-                À la fin au lieu de dire "Si vous avez besoin de plus de précisions ou d'aide pour ajuster votre plan, n'hésitez pas à demander !" tu diras plutôt "N'hésitez pas à enrichir la description ou changer de date cible et demander une nouvelle recommandation"
-
-                Restrictions :
-
-                Ne donne jamais de conseils juridiques, fiscaux ou d'investissement complexes.
-
-                Si les données sont insuffisantes, demande des précisions avec bienveillance.
-
-                Voici donc les données fournis par l'utilisateur: 
-
-                La description: ${description}, le montant cible: ${targetAmount}, la date cible: ${targetDate}
-            `,
-        },
-      ],
-    });
-    return result.text;
+    return text;
   } catch (err) {
     console.error(err);
   }

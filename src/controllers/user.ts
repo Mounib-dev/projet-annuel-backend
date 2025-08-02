@@ -51,7 +51,6 @@ export const userInfo = async (req: Request, res: Response): Promise<any> => {
   const { id } = req.body.user;
   try {
     const user = await User.findOne({ _id: id }, { password: 0 });
-    console.log(user);
     if (!user) {
       return res.status(401).json(generateUnauthorizedErrorMessage());
     }
