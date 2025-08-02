@@ -2,14 +2,9 @@ import { RequestHandler } from "express";
 import { Balance } from "../../models/Balance";
 import { generateInternalServerErrorMessage } from "../../helpers/generateErrorResponse";
 
-export const createBalance: RequestHandler = async (
-  req,
-  res,
-  next
-): Promise<any> => {
+export const createBalance: RequestHandler = async (req, res): Promise<any> => {
   const user = req.body.user;
   const { amount } = req.body;
-  console.log(amount);
   try {
     const balance = new Balance({
       amount,
@@ -27,15 +22,13 @@ export const createBalance: RequestHandler = async (
 
 export const retrieeBalance: RequestHandler = async (
   req,
-  res,
-  next
+  res
 ): Promise<any> => {
   const user = req.body.user;
   try {
     const balance = await Balance.find({
       user: user.id,
     });
-    console.log(balance[0]);
     if (balance) {
       return res.status(200).json(balance[0]);
     }
