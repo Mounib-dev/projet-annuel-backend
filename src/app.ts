@@ -22,7 +22,7 @@ const app: Express = express();
 app.use(cors());
 app.use(express.json());
 
-let port = process.env.SERVER_PORT || 3000;
+let port = process.env.PORT || 3000;
 
 app.use("/api/v1", router);
 app.use("/api/v1/user", userRoutes);
