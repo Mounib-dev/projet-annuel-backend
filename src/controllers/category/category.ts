@@ -5,7 +5,7 @@ import { availableIcons } from "../../data/icons";
 export const getCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find();
-    res.json(categories); 
+    res.json(categories);
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur" });
   }
