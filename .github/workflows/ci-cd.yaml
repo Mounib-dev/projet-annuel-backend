@@ -67,4 +67,4 @@ jobs:
         run: |
           git config user.name "$GIT_AUTHOR_NAME"
           git config user.email "$GIT_AUTHOR_EMAIL"
-          git push heroku HEAD:main -f
+          git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME_API}.git HEAD:main -f
