@@ -45,7 +45,10 @@ jobs:
     env:
       HEROKU_APP_NAME_API: ${{ secrets.HEROKU_APP_NAME_API }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
@@ -60,11 +63,6 @@ jobs:
       - name: Push to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          GIT_AUTHOR_NAME: "GitHub Actions"
-          GIT_AUTHOR_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-          GIT_COMMITTER_NAME: "GitHub Actions"
-          GIT_COMMITTER_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+          HEROKU_APP_NAME_API: ${{ secrets.HEROKU_APP_NAME_API }}
         run: |
-          git config user.name "$GIT_AUTHOR_NAME"
-          git config user.email "$GIT_AUTHOR_EMAIL"
           git push https://heroku:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME_API}.git HEAD:main -f
