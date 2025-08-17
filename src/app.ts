@@ -27,7 +27,7 @@ securityConfig(app);
 
 app.use("/api/v1", router);
 app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/auth", authRoutes, authLimiter);
+app.use("/api/v1/auth", authLimiter, authRoutes);
 
 app.use("/api/v1/transaction", transactionRoutes);
 app.use("/api/v1/chatbot", chatbotRoutes);
