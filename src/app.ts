@@ -3,7 +3,7 @@ dotenv.config();
 
 import express, { Express } from "express";
 
-import cors from "cors";
+import { securityConfig, authLimiter } from "./config/security";
 
 import mongoose from "mongoose";
 
@@ -19,14 +19,15 @@ import categoryRoutes from "./routes/category.api";
 
 const app: Express = express();
 
-app.use(cors());
 app.use(express.json());
 
 let port = process.env.PORT || 3000;
 
+securityConfig(app);
+
 app.use("/api/v1", router);
 app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes, authLimiter);
 
 app.use("/api/v1/transaction", transactionRoutes);
 app.use("/api/v1/chatbot", chatbotRoutes);
