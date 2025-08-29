@@ -1,8 +1,9 @@
 import express from "express";
+import type { Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
-import rateLimit from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 
 export function securityConfig(app: express.Express) {
   app.set("trust proxy", 1);
@@ -53,10 +54,13 @@ export function securityConfig(app: express.Express) {
     standardHeaders: "draft-7",
     legacyHeaders: false,
     message: { error: "Too many requests." },
-    keyGenerator: (req) => req.ip || "unknown",
   });
   app.use(globalLimiter);
 }
+const safeIpKeyGen = ipKeyGenerator as unknown as (
+  req: Request,
+  res: Response
+) => string;
 
 export const authLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 min
@@ -64,9 +68,9 @@ export const authLimiter = rateLimit({
   standardHeaders: "draft-7",
   legacyHeaders: false,
   message: { error: "Too many auth attempts. Please wait a moment." },
-  keyGenerator: (req) => {
-    const ip = req.ip || "unknown";
+  keyGenerator: (req: Request, res: Response) => {
+    const safeIp = safeIpKeyGen(req, res);
     const id = (req.body?.email || req.body?.username || "").toLowerCase();
-    return `${ip}:${id}`;
+    return id ? `${safeIp}:${id}` : safeIp;
   },
 });
