@@ -13,8 +13,8 @@ router.post("/create", authorize, createTransaction);
 
 router.get("/list", authorize, retrieveTransactions);
 
-router.patch("/transactions/:id", updateTransaction);
+router.patch("/:id", authorize, updateTransaction);
 
-router.delete("/transactions/:id", deleteTransaction);
+router.delete("/:id", authorize, deleteTransaction);
 
 export default router;
