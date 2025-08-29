@@ -79,7 +79,7 @@ export const updateTransaction: RequestHandler = async (
   req,
   res
 ): Promise<any> => {
-  const userId: string = req.body.user?.id;
+  const userId = req.body.user.id;
   const { id } = req.params;
 
   if (!Types.ObjectId.isValid(id)) {
@@ -143,9 +143,8 @@ export const deleteTransaction: RequestHandler = async (
   req,
   res
 ): Promise<any> => {
-  const userId: string = req.body.user?.id;
+  const userId = req.body.user.id;
   const { id } = req.params;
-
   if (!Types.ObjectId.isValid(id)) {
     return res.status(404).json(generateNotFoundTransactionsErrorMessage());
   }
@@ -172,7 +171,7 @@ export const deleteTransaction: RequestHandler = async (
 
     await tx.deleteOne();
 
-    return res.status(204);
+    return res.status(204).send();
   } catch (err) {
     console.error(err);
     return res.status(500).json(generateInternalServerErrorMessage());
