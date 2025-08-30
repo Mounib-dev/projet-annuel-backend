@@ -132,7 +132,7 @@ export const updateTransaction: RequestHandler = async (
 
     return res
       .status(200)
-      .json({ message: "Transaction updated successfully" });
+      .json({ message: "Transaction updated successfully", tx });
   } catch (err) {
     console.error(err);
     return res.status(500).json(generateInternalServerErrorMessage());
